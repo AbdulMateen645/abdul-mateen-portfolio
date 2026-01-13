@@ -25,32 +25,32 @@ export const SKILL_GROUPS: SkillGroup[] = [
     category: "Backend Development",
     skills: [
       { name: "Laravel", level: 90, description: "Building robust, scalable MVC applications and microservices." },
-      { name: "PHP", level: 85, description: "Advanced application logic and server-side processing." },
-      { name: "MySQL", level: 80, description: "Database design, optimization, and complex querying." }
+      { name: "PHP", level: 60, description: "Advanced application logic and server-side processing." },
+      { name: "MySQL", level: 60, description: "Database design, optimization, and complex querying." }
     ]
   },
   {
     category: "AI & Automation",
     skills: [
-      { name: "OpenAI API", level: 75, description: "Integrating LLMs for chatbots and content generation." },
-      { name: "Python", level: 70, description: "Scripting for data processing and basic AI tasks." },
-      { name: "Workflow Automation", level: 80, description: "Streamlining business processes using modern tools." }
+      { name: "OpenAI API", level: 40, description: "Integrating LLMs for chatbots and content generation." },
+      { name: "Python", level: 40, description: "Scripting for data processing and basic AI tasks." },
+      { name: "Workflow Automation", level: 50, description: "Streamlining business processes using modern tools." }
     ]
   },
   {
     category: "Frontend Development",
     skills: [
-      { name: "React", level: 75, description: "Crafting interactive and responsive user interfaces." },
-      { name: "Tailwind CSS", level: 90, description: "Rapid UI development with utility-first styling." },
+      { name: "Next.js", level: 70, description: "Building modern, scalable React applications." },
+      { name: "Tailwind CSS", level: 80, description: "Rapid UI development with utility-first styling." },
       { name: "TypeScript", level: 70, description: "Enhancing code quality with static typing." }
     ]
   },
   {
     category: "Tools & Collaboration",
     skills: [
-      { name: "Git & GitHub", level: 85, description: "Version control and collaborative development flows." },
-      { name: "Docker", level: 65, description: "Containerizing environments for consistency." },
-      { name: "REST APIs", level: 95, description: "Designing and consuming standard-compliant endpoints." }
+      { name: "Git", level: 60, description: "Version control and collaborative development flows." },
+      { name: "Docker", level: 30, description: "Containerizing environments for consistency." },
+      { name: "REST APIs", level: 60, description: "Designing and consuming standard-compliant endpoints." }
     ]
   }
 ];

@@ -15,7 +15,7 @@ const Section: React.FC<SectionProps> = ({ id, title, subtitle, children, classN
   return (
     <section 
       id={id} 
-      className={`py-24 px-6 md:px-12 lg:px-24 overflow-hidden ${dark ? 'bg-zinc-950' : 'bg-[#09090b]'} ${className}`}
+      className={`py-12 px-6 md:px-12 lg:px-24 overflow-hidden ${dark ? 'bg-zinc-950' : 'bg-[#09090b]'} ${className}`}
     >
       <div className="max-w-7xl mx-auto">
         {(title || subtitle) && (
@@ -24,7 +24,7 @@ const Section: React.FC<SectionProps> = ({ id, title, subtitle, children, classN
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-16"
+            className="mb-8"
           >
             {title && (
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
