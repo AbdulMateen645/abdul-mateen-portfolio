@@ -53,26 +53,26 @@ const App: React.FC = () => {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 px-6 py-4 transition-all duration-300 backdrop-blur-md bg-emerald-600 border-b border-emerald-700">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <motion.a 
-            href="home" 
+          <motion.button 
+            onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })}
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }}
-            className="text-xl font-bold text-white flex items-center gap-2 group"
+            className="text-xl font-bold text-white flex items-center gap-2 group cursor-pointer"
           >
             <span className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-sm font-bold">AM</span>
             <span className="group-hover:text-emerald-100 transition-colors">Mateen Hashmi</span>
-          </motion.a>
+          </motion.button>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             {['About', 'Skills', 'Experience', 'Contact'].map((item) => (
-              <a 
+              <button 
                 key={item} 
-                href={`#${item.toLowerCase()}`} 
+                onClick={() => document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-sm font-medium text-white hover:text-emerald-100 transition-colors"
               >
                 {item}
-              </a>
+              </button>
             ))}
           </div>
 
@@ -95,14 +95,16 @@ const App: React.FC = () => {
               <X size={32} />
             </button>
             {['About', 'Skills', 'Experience', 'Contact'].map((item) => (
-              <a 
+              <button 
                 key={item} 
-                href={`#${item.toLowerCase()}`} 
+                onClick={() => {
+                  document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+                  setIsMenuOpen(false);
+                }}
                 className="text-4xl font-bold text-white hover:text-emerald-500"
-                onClick={() => setIsMenuOpen(false)}
               >
                 {item}
-              </a>
+              </button>
             ))}
           </motion.div>
         )}
