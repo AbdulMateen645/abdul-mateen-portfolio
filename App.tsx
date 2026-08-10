@@ -46,38 +46,41 @@ const App: React.FC = () => {
     <div className="relative min-h-screen">
       {/* Scroll Progress Bar */}
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-emerald-500 origin-left z-[100]" 
+        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-cyan-400 to-emerald-500 origin-left z-[100] shadow-lg shadow-emerald-500/50" 
         style={{ scaleX }}
       />
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 px-6 py-4 transition-all duration-300 backdrop-blur-md bg-emerald-600 border-b border-emerald-700">
+      <nav className="fixed top-0 w-full z-50 px-6 py-4 transition-all duration-300 backdrop-blur-md bg-gradient-to-r from-emerald-600 to-emerald-700 border-b border-emerald-500/30 shadow-lg shadow-emerald-600/20">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <motion.button 
+            type="button"
             onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })}
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }}
-            className="text-xl font-bold text-white flex items-center gap-2 group cursor-pointer"
+            className="text-xl font-bold text-white flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform"
           >
-            <span className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-sm font-bold">AM</span>
+            <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-300 to-cyan-300 flex items-center justify-center text-sm font-bold text-emerald-900">AM</span>
             <span className="group-hover:text-emerald-100 transition-colors">Mateen Hashmi</span>
           </motion.button>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            {['About', 'Skills', 'Experience', 'Contact'].map((item) => (
+            {['About', 'Skills', 'Experience', 'Projects', 'Contact'].map((item) => (
               <button 
+                type="button"
                 key={item} 
                 onClick={() => document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm font-medium text-white hover:text-emerald-100 transition-colors"
+                className="text-sm font-medium text-white hover:text-emerald-200 transition-all duration-300 relative group"
               >
                 {item}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-300 to-cyan-300 group-hover:w-full transition-all duration-300" />
               </button>
             ))}
           </div>
 
-          <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X /> : <Menu />}
+          <button type="button" className="md:hidden text-white hover:text-emerald-200 transition-colors" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </nav>
@@ -89,19 +92,20 @@ const App: React.FC = () => {
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            className="fixed inset-0 z-[60] bg-zinc-950 flex flex-col p-12 gap-8"
+            className="fixed inset-0 z-[60] bg-gradient-to-b from-zinc-950 to-zinc-900 flex flex-col p-12 gap-8 backdrop-blur-sm"
           >
-            <button className="self-end text-zinc-400" onClick={() => setIsMenuOpen(false)}>
+            <button type="button" className="self-end text-zinc-400 hover:text-emerald-400 transition-colors" onClick={() => setIsMenuOpen(false)}>
               <X size={32} />
             </button>
-            {['About', 'Skills', 'Experience', 'Contact'].map((item) => (
+            {['About', 'Skills', 'Experience', 'Projects', 'Contact'].map((item) => (
               <button 
+                type="button"
                 key={item} 
                 onClick={() => {
                   document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
                   setIsMenuOpen(false);
                 }}
-                className="text-4xl font-bold text-white hover:text-emerald-500"
+                className="text-4xl font-bold text-white hover:text-emerald-400 transition-all duration-300 text-left"
               >
                 {item}
               </button>
@@ -125,21 +129,21 @@ const App: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-bold mb-6">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold mb-6 backdrop-blur-sm">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 Available for remote work
               </div>
               <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6">
-                Building scalable <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-indigo-400">web systems</span> with Laravel & AI
+                Building scalable <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 animate-pulse">web systems</span> with Laravel & AI
               </h1>
-              <p className="text-zinc-400 text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
+              <p className="text-zinc-300 text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
                 Empowering businesses with efficient backend architectures and future-ready AI automation workflows.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="gap-2" onClick={() => document.getElementById('projects')?.scrollIntoView()}>
+                <Button type="button" size="lg" className="gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/30" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
                   View Projects <ArrowRight size={20} />
                 </Button>
-                <Button variant="secondary" size="lg" className="gap-2">
+                <Button type="button" variant="secondary" size="lg" className="gap-2 border-2 border-emerald-500/50 hover:border-emerald-400 hover:bg-emerald-500/10" onClick={() => window.open('/My CV/Abdul Mateen PHP.pdf', '_blank')}>
                   <Download size={20} /> Download CV
                 </Button>
               </div>
@@ -156,7 +160,7 @@ const App: React.FC = () => {
                 <div className="absolute -inset-4 border border-zinc-800 rounded-3xl -rotate-6" />
                 <div className="absolute -inset-4 border border-emerald-500/20 rounded-3xl rotate-3" />
                 <div className="absolute inset-0 rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl">
-                   <img src="https://app.skfinancial.com/uploads/employees/0n43oJnfelAtXcjiUqqFz1H6ProcIkMtC0s7Y2SQ.jpg" alt="Abdul Mateen Hashmi" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                   <img src="/Images/image.jpeg" alt="Abdul Mateen Hashmi" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                 </div>
               </div>
             </motion.div>
@@ -314,6 +318,23 @@ const App: React.FC = () => {
         {/* EXPERIENCE SECTION */}
         <Section id="experience" title="Professional Journey">
           <ExperienceTimeline />
+        </Section>
+
+        {/* PROJECTS SECTION */}
+        <Section id="projects" title="Featured Projects" subtitle="Showcasing real-world solutions and technical expertise." dark>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {PROJECTS.map((project, idx) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+              >
+                <ProjectCard project={project} />
+              </motion.div>
+            ))}
+          </div>
         </Section>
 
         {/* EDUCATION & SOFT SKILLS */}
@@ -521,9 +542,9 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="py-4 border-t border-emerald-600 bg-emerald-600 px-6">
+      <footer className="py-6 border-t border-emerald-600/30 bg-gradient-to-r from-emerald-950 to-emerald-900 px-6 shadow-lg shadow-emerald-600/10">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-white text-sm font-semibold">&copy; {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</p>
+          <p className="text-emerald-200 text-sm font-semibold">&copy; {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</p>
         </div>
       </footer>
     </div>
