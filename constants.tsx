@@ -22,35 +22,42 @@ export const PROFILE = {
 
 export const SKILL_GROUPS: SkillGroup[] = [
   {
-    category: "Backend Development",
+    category: "Languages & Frameworks",
     skills: [
+      { name: "PHP", level: 85, description: "Advanced application logic and server-side processing." },
       { name: "Laravel", level: 90, description: "Building robust, scalable MVC applications and microservices." },
-      { name: "PHP", level: 60, description: "Advanced application logic and server-side processing." },
-      { name: "MySQL", level: 60, description: "Database design, optimization, and complex querying." }
+      { name: "CodeIgniter", level: 75, description: "Lightweight framework for rapid web application development." },
+      { name: "Next.js", level: 80, description: "Building modern, scalable React applications." },
+      { name: "HTML5 & CSS3", level: 85, description: "Semantic markup and responsive design." },
+      { name: "Tailwind CSS", level: 85, description: "Rapid UI development with utility-first styling." }
     ]
   },
   {
-    category: "AI & Automation",
+    category: "Databases & APIs",
     skills: [
-      { name: "OpenAI API", level: 40, description: "Integrating LLMs for chatbots and content generation." },
-      { name: "Python", level: 40, description: "Scripting for data processing and basic AI tasks." },
-      { name: "Workflow Automation", level: 50, description: "Streamlining business processes using modern tools." }
+      { name: "MySQL", level: 80, description: "Database design, optimization, and complex querying." },
+      { name: "SQL", level: 80, description: "Writing optimized queries and database management." },
+      { name: "RESTful APIs", level: 85, description: "Designing and consuming standard-compliant endpoints." },
+      { name: "Authentication & Authorization", level: 80, description: "Implementing secure user access control systems." }
     ]
   },
   {
-    category: "Frontend Development",
+    category: "Tools & Platforms",
     skills: [
-      { name: "Next.js", level: 70, description: "Building modern, scalable React applications." },
-      { name: "Tailwind CSS", level: 80, description: "Rapid UI development with utility-first styling." },
-      { name: "TypeScript", level: 70, description: "Enhancing code quality with static typing." }
+      { name: "Git & GitHub", level: 80, description: "Version control and collaborative development workflows." },
+      { name: "Docker", level: 70, description: "Containerizing applications for consistency and deployment." },
+      { name: "Postman", level: 75, description: "API testing and documentation." },
+      { name: "Linux", level: 75, description: "Server management and command-line operations." },
+      { name: "VS Code", level: 85, description: "Professional code editor and development environment." }
     ]
   },
   {
-    category: "Tools & Collaboration",
+    category: "Core Competencies",
     skills: [
-      { name: "Git", level: 60, description: "Version control and collaborative development flows." },
-      { name: "Docker", level: 30, description: "Containerizing environments for consistency." },
-      { name: "REST APIs", level: 60, description: "Designing and consuming standard-compliant endpoints." }
+      { name: "Web Security", level: 80, description: "Implementing secure coding practices and vulnerability prevention." },
+      { name: "Performance Optimization", level: 80, description: "Optimizing application speed and resource efficiency." },
+      { name: "Responsive Design", level: 85, description: "Creating mobile-first, adaptive user interfaces." },
+      { name: "Production Support", level: 80, description: "Troubleshooting, debugging, and resolving production incidents." }
     ]
   }
 ];
