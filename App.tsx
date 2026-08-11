@@ -143,7 +143,7 @@ const App: React.FC = () => {
                 <Button type="button" size="lg" className="gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/30" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
                   View Projects <ArrowRight size={20} />
                 </Button>
-                <Button type="button" variant="secondary" size="lg" className="gap-2 border-2 border-emerald-500/50 hover:border-emerald-400 hover:bg-emerald-500/10" onClick={() => window.open('/My CV/Abdul Mateen PHP.pdf', '_blank')}>
+                <Button type="button" variant="secondary" size="lg" className="gap-2 border-2 border-emerald-500/50 hover:border-emerald-400 hover:bg-emerald-500/10" onClick={() => window.open('/My CV/Abdul_Mateen_Hashmi_CV.pdf', '_blank')}>
                   <Download size={20} /> Download CV
                 </Button>
               </div>
