@@ -17,11 +17,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       whileHover={{ y: -5 }}
       className="group relative flex flex-col h-full rounded-2xl border border-zinc-800 bg-zinc-900/40 overflow-hidden"
     >
-      <div className="aspect-video overflow-hidden">
+      <div className="aspect-video overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-900">
         <img 
           src={project.image} 
           alt={project.title} 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = 'none';
+          }}
         />
       </div>
       

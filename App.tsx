@@ -156,7 +156,7 @@ const App: React.FC = () => {
                 <div className="absolute -inset-4 border border-zinc-800 rounded-3xl -rotate-6" />
                 <div className="absolute -inset-4 border border-emerald-500/20 rounded-3xl rotate-3" />
                 <div className="absolute inset-0 rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl">
-                   <img src="https://app.skfinancial.com/uploads/employees/0n43oJnfelAtXcjiUqqFz1H6ProcIkMtC0s7Y2SQ.jpg" alt="Abdul Mateen Hashmi" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                   <img src="/Images/image.jpeg" alt="Abdul Mateen Hashmi" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                 </div>
               </div>
             </motion.div>
@@ -221,18 +221,18 @@ const App: React.FC = () => {
 
         {/* SKILLS SECTION */}
         <Section id="skills" title="Technical Expertise" subtitle="A multi disciplinary toolkit for the modern web." dark>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 auto-rows-fr">
             {SKILL_GROUPS.map((group, idx) => (
-              <motion.div 
+              <motion.div
                 key={group.category}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group relative"
+                className="group relative h-full"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative p-8 rounded-2xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 backdrop-blur-xl hover:border-emerald-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10">
+                <div className="relative h-full flex flex-col p-8 rounded-2xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 backdrop-blur-xl hover:border-emerald-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10">
                   <div className="flex items-center gap-3 mb-8">
                     <div className="p-2.5 rounded-lg bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30">
                       {idx === 0 && <Code2 className="text-emerald-400 w-5 h-5" />}
@@ -242,7 +242,8 @@ const App: React.FC = () => {
                     </div>
                     <h3 className="text-lg font-bold text-white">{group.category}</h3>
                   </div>
-                  <div className="space-y-7">
+
+                  <div className="space-y-7 flex-1">
                     {group.skills.map(skill => {
                       const [displayValue, setDisplayValue] = useState(0);
                       const [isHovered, setIsHovered] = useState(false);
@@ -262,10 +263,10 @@ const App: React.FC = () => {
                       }, [isHovered, skill.level]);
 
                       return (
-                        <motion.div 
-                          key={skill.name} 
-                          className="group cursor-pointer" 
-                          onMouseEnter={() => setIsHovered(true)} 
+                        <motion.div
+                          key={skill.name}
+                          className="group cursor-pointer"
+                          onMouseEnter={() => setIsHovered(true)}
                           onMouseLeave={() => {
                             setIsHovered(false);
                             setDisplayValue(0);
@@ -279,7 +280,7 @@ const App: React.FC = () => {
                         >
                           <div className="flex justify-between items-center mb-3">
                             <span className="text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">{skill.name}</span>
-                            <motion.span 
+                            <motion.span
                               className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full"
                               animate={{ scale: isHovered ? 1.1 : 1 }}
                             >
@@ -287,14 +288,14 @@ const App: React.FC = () => {
                             </motion.span>
                           </div>
                           <div className="h-2 w-full bg-zinc-700/50 rounded-full overflow-hidden backdrop-blur-sm border border-zinc-600/30">
-                            <motion.div 
+                            <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: isHovered ? `${skill.level}%` : 0 }}
                               transition={{ duration: 0.8, ease: "easeOut" }}
                               className="h-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-cyan-400 rounded-full shadow-lg shadow-emerald-500/50"
                             />
                           </div>
-                          <motion.p 
+                          <motion.p
                             className="text-xs text-zinc-400 mt-2"
                             animate={{ opacity: isHovered ? 1 : 0 }}
                             transition={{ duration: 0.3 }}
