@@ -139,7 +139,7 @@ const App: React.FC = () => {
                 <Button size="lg" className="gap-2" onClick={() => document.getElementById('projects')?.scrollIntoView()}>
                   View Projects <ArrowRight size={20} />
                 </Button>
-                <Button variant="secondary" size="lg" className="gap-2">
+                <Button variant="secondary" size="lg" className="gap-2" onClick={() => window.open('/My CV/Abdul_Mateen_Hashmi_CV.pdf', '_blank')}>
                   <Download size={20} /> Download CV
                 </Button>
               </div>
