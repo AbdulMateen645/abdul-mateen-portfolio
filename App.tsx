@@ -1,330 +1,257 @@
-
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-// Add missing icons: Code2, Cpu, Layout, Settings, CheckCircle2
-import { 
-  Menu, 
-  X, 
-  ArrowRight, 
-  Download, 
-  Mail, 
-  Phone, 
-  Github, 
-  Linkedin, 
-  MapPin, 
-  Send,
-  Code2,
-  Cpu,
-  Layout,
-  Settings,
-  CheckCircle2
-} from 'lucide-react';
-
-import { PROFILE, SKILL_GROUPS, PROJECTS, EDUCATION_DATA, SOFT_SKILLS } from './constants';
-import Button from './components/UI/Button';
-import Section from './components/Layout/Section';
-import ExperienceTimeline from './components/Experience/ExperienceTimeline';
-import ProjectCard from './components/Projects/ProjectCard';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, ArrowRight, Download, Mail, Github, Linkedin, ExternalLink } from 'lucide-react';
+import { PROFILE, SKILL_GROUPS, PROJECTS, EDUCATION_DATA } from './constants';
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success'>('idle');
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+  const [activeSection, setActiveSection] = useState('home');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormStatus('sending');
-    setTimeout(() => setFormStatus('success'), 1500);
+  const navItems = ['Home', 'About', 'Skills', 'Projects', 'Contact'];
+
+  const scrollToSection = (id: string) => {
+    setActiveSection(id.toLowerCase());
+    setIsMenuOpen(false);
+    document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Scroll Progress Bar */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-cyan-400 to-emerald-500 origin-left z-[100] shadow-lg shadow-emerald-500/50" 
-        style={{ scaleX }}
-      />
-
+    <div className="bg-black text-white min-h-screen">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 px-6 py-4 transition-all duration-300 backdrop-blur-md bg-gradient-to-r from-emerald-600 to-emerald-700 border-b border-emerald-500/30 shadow-lg shadow-emerald-600/20">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <motion.button 
-            type="button"
-            onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })}
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }}
-            className="text-xl font-bold text-white flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform"
+      <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <motion.button
+            onClick={() => scrollToSection('home')}
+            className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"
           >
-            <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-300 to-cyan-300 flex items-center justify-center text-sm font-bold text-emerald-900">AM</span>
-            <span className="group-hover:text-emerald-100 transition-colors">Mateen Hashmi</span>
+            AM
           </motion.button>
 
-          {/* Desktop Nav */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            {['About', 'Skills', 'Experience', 'Projects', 'Contact'].map((item) => (
-              <button 
-                type="button"
-                key={item} 
-                onClick={() => document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm font-medium text-white hover:text-emerald-200 transition-all duration-300 relative group"
+            {navItems.map((item) => (
+              <button
+                key={item}
+                onClick={() => scrollToSection(item)}
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === item.toLowerCase()
+                    ? 'text-blue-400'
+                    : 'text-gray-400 hover:text-white'
+                }`}
               >
                 {item}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-300 to-cyan-300 group-hover:w-full transition-all duration-300" />
               </button>
             ))}
+            <button
+              onClick={() => window.open('/My CV/Abdul_Mateen_Hashmi_CV.pdf', '_blank')}
+              className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg text-sm font-medium hover:shadow-lg hover:shadow-blue-500/50 transition-all"
+            >
+              Resume
+            </button>
           </div>
 
-          <button type="button" className="md:hidden text-white hover:text-emerald-200 transition-colors" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden text-white"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="md:hidden bg-black border-t border-white/10"
+            >
+              <div className="px-6 py-4 space-y-4">
+                {navItems.map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item)}
+                    className="block w-full text-left text-gray-400 hover:text-white transition-colors"
+                  >
+                    {item}
+                  </button>
+                ))}
+                <button
+                  onClick={() => window.open('/My CV/Abdul_Mateen_Hashmi_CV.pdf', '_blank')}
+                  className="w-full px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg text-sm font-medium"
+                >
+                  Resume
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            className="fixed inset-0 z-[60] bg-gradient-to-b from-zinc-950 to-zinc-900 flex flex-col p-12 gap-8 backdrop-blur-sm"
-          >
-            <button type="button" className="self-end text-zinc-400 hover:text-emerald-400 transition-colors" onClick={() => setIsMenuOpen(false)}>
-              <X size={32} />
+      {/* Hero Section */}
+      <section id="home" className="pt-32 pb-20 px-6 max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="space-y-6"
+        >
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+              Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Abdul Mateen</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-400">
+              Full-stack Web Developer & Laravel Specialist
+            </p>
+          </div>
+
+          <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">
+            I build scalable web applications with Laravel, PHP, and Next.js. Passionate about clean code, performance optimization, and creating solutions that make a real impact.
+          </p>
+
+          <div className="flex flex-wrap gap-4 pt-4">
+            <button
+              onClick={() => scrollToSection('projects')}
+              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg font-medium hover:shadow-lg hover:shadow-blue-500/50 transition-all flex items-center gap-2"
+            >
+              View My Work <ArrowRight size={18} />
             </button>
-            {['About', 'Skills', 'Experience', 'Projects', 'Contact'].map((item) => (
-              <button 
-                type="button"
-                key={item} 
-                onClick={() => {
-                  document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
-                  setIsMenuOpen(false);
-                }}
-                className="text-4xl font-bold text-white hover:text-emerald-400 transition-all duration-300 text-left"
-              >
-                {item}
-              </button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <main>
-        {/* HERO SECTION */}
-        <section id="home" className="relative min-h-screen flex items-center pt-20 px-6 md:px-12 lg:px-24 overflow-hidden">
-          {/* Background Mesh Gradient */}
-          <div className="absolute inset-0 z-0">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-600/20 rounded-full blur-[120px]" />
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[120px]" />
+            <button
+              onClick={() => scrollToSection('contact')}
+              className="px-8 py-3 border border-white/20 rounded-lg font-medium hover:border-white/40 transition-colors"
+            >
+              Get in Touch
+            </button>
           </div>
 
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+          {/* Social Links */}
+          <div className="flex gap-4 pt-8">
+            <a
+              href="https://github.com/AbdulMateen645"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold mb-6 backdrop-blur-sm">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Available for remote work
-              </div>
-              <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6">
-                Building scalable <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 animate-pulse">web systems</span> with Laravel & AI
-              </h1>
-              <p className="text-zinc-300 text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
-                Empowering businesses with efficient backend architectures and future-ready AI automation workflows.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button type="button" size="lg" className="gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-lg shadow-emerald-500/30" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
-                  View Projects <ArrowRight size={20} />
-                </Button>
-                <Button type="button" variant="secondary" size="lg" className="gap-2 border-2 border-emerald-500/50 hover:border-emerald-400 hover:bg-emerald-500/10" onClick={() => window.open('/My CV/Abdul_Mateen_Hashmi_CV.pdf', '_blank')}>
-                  <Download size={20} /> Download CV
-                </Button>
-              </div>
-            </motion.div>
+              <Github size={20} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/abdul-mateen-hashmi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <Linkedin size={20} />
+            </a>
+            <a
+              href="mailto:a.mateen2025@gmail.com"
+              className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <Mail size={20} />
+            </a>
+          </div>
+        </motion.div>
+      </section>
 
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1 }}
-              className="hidden lg:block relative"
-            >
-              <div className="relative w-full aspect-square max-w-md mx-auto">
-                {/* Decorative Elements */}
-                <div className="absolute -inset-4 border border-zinc-800 rounded-3xl -rotate-6" />
-                <div className="absolute -inset-4 border border-emerald-500/20 rounded-3xl rotate-3" />
-                <div className="absolute inset-0 rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl">
-                   <img src="/Images/image.jpeg" alt="Abdul Mateen Hashmi" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+      {/* About Section */}
+      <section id="about" className="py-20 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="space-y-12"
+        >
+          <div>
+            <h2 className="text-4xl font-bold mb-8">About Me</h2>
+            <div className="grid md:grid-cols-2 gap-12">
+              <div className="space-y-4 text-gray-400">
+                <p>
+                  I'm a Web Developer with {PROFILE.experience} of professional experience building production-grade web applications. My expertise spans backend development with Laravel and PHP, frontend development with Next.js, and database design with MySQL.
+                </p>
+                <p>
+                  I specialize in creating scalable, maintainable solutions that solve real business problems. I'm passionate about writing clean code, optimizing performance, and collaborating with teams to deliver high-quality software.
+                </p>
+                <p>
+                  When I'm not coding, I'm exploring new technologies, contributing to open-source projects, and continuously learning to stay ahead in this fast-paced industry.
+                </p>
+              </div>
+              <div className="space-y-6">
+                <div className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-colors">
+                  <h3 className="text-blue-400 font-semibold mb-2">Experience</h3>
+                  <p className="text-gray-400">2+ years building web applications for startups and enterprises</p>
+                </div>
+                <div className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-colors">
+                  <h3 className="text-blue-400 font-semibold mb-2">Focus</h3>
+                  <p className="text-gray-400">Backend systems, APIs, performance optimization, and clean architecture</p>
+                </div>
+                <div className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-colors">
+                  <h3 className="text-blue-400 font-semibold mb-2">Education</h3>
+                  <p className="text-gray-400">BS Computer Science from University of Poonch Rawalakot</p>
                 </div>
               </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ABOUT SECTION */}
-        <Section id="about" title="The Developer Behind the Code">
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <p className="text-zinc-300 text-lg leading-relaxed">
-                Hello! I'm <span className="text-white font-bold">Abdul Mateen Hashmi</span>, a Web Developer driven by the potential of backend systems and automation. Over the last {PROFILE.experience}, I've refined my skills in the Laravel ecosystem, creating tools that solve real business problems.
-              </p>
-              <p className="text-zinc-400 leading-relaxed">
-                My approach focuses on clean code, scalability, and seamless integration. Recently, I've been deep-diving into <span className="text-emerald-500">AI automation</span> helping teams leverage LLMs and automated workflows to reduce manual overhead and increase productivity.
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="p-4 rounded-xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-emerald-500/10"
-                >
-                  <div className="text-3xl font-bold text-white mb-1">2+</div>
-                  <div className="text-zinc-500 text-sm">Years Exp.</div>
-                </motion.div>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                  className="p-4 rounded-xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-emerald-500/10"
-                >
-                  <div className="text-3xl font-bold text-white mb-1">15+</div>
-                  <div className="text-zinc-500 text-sm">Projects Delivered</div>
-                </motion.div>
-              </div>
-            </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="group relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative p-6 rounded-2xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 backdrop-blur-xl hover:border-emerald-500/30 transition-all hover:shadow-2xl hover:shadow-emerald-500/10">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-4">Core Philosophy</h4>
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-                  <Code2 size={64} />
-                </div>
-                <h5 className="text-white font-bold mb-2 text-xl italic">"Simplicity is the ultimate sophistication."</h5>
-                <p className="text-zinc-400">I believe the best backend systems are the ones that work so reliably they go unnoticed, while the best interfaces are those that make complex tasks feel effortless.</p>
-              </div>
-            </motion.div>
-          </div>
-        </Section>
-
-        {/* SKILLS SECTION */}
-<Section id="skills" title="Technical Expertise" subtitle="A multi disciplinary toolkit for the modern web." dark>
-  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 auto-rows-fr">
-    {SKILL_GROUPS.map((group, idx) => (
-      <motion.div
-        key={group.category}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: idx * 0.1 }}
-        className="group relative h-full"
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="relative h-full flex flex-col p-8 rounded-2xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 backdrop-blur-xl hover:border-emerald-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="p-2.5 rounded-lg bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30">
-              {idx === 0 && <Code2 className="text-emerald-400 w-5 h-5" />}
-              {idx === 1 && <Cpu className="text-indigo-400 w-5 h-5" />}
-              {idx === 2 && <Layout className="text-amber-400 w-5 h-5" />}
-              {idx === 3 && <Settings className="text-blue-400 w-5 h-5" />}
             </div>
-            <h3 className="text-lg font-bold text-white">{group.category}</h3>
           </div>
+        </motion.div>
+      </section>
 
-          {/* flex-1 makes this fill remaining height so short cards don't look empty at bottom,
-              and all cards in the grid end up the same height thanks to auto-rows-fr above */}
-          <div className="space-y-7 flex-1">
-            {group.skills.map(skill => {
-              const [displayValue, setDisplayValue] = useState(0);
-              const [isHovered, setIsHovered] = useState(false);
+      {/* Skills Section */}
+      <section id="skills" className="py-20 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="space-y-12"
+        >
+          <h2 className="text-4xl font-bold">Skills & Expertise</h2>
 
-              useEffect(() => {
-                if (!isHovered) return;
-                let current = 0;
-                const interval = setInterval(() => {
-                  current += 1;
-                  if (current <= skill.level) {
-                    setDisplayValue(current);
-                  } else {
-                    clearInterval(interval);
-                  }
-                }, 15);
-                return () => clearInterval(interval);
-              }, [isHovered, skill.level]);
-
-              return (
-                <motion.div
-                  key={skill.name}
-                  className="group cursor-pointer"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => {
-                    setIsHovered(false);
-                    setDisplayValue(0);
-                  }}
-                  onTouchStart={() => setIsHovered(true)}
-                  onTouchEnd={() => {
-                    setIsHovered(false);
-                    setDisplayValue(0);
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">{skill.name}</span>
-                    <motion.span
-                      className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full"
-                      animate={{ scale: isHovered ? 1.1 : 1 }}
-                    >
-                      {displayValue}%
-                    </motion.span>
-                  </div>
-                  <div className="h-2 w-full bg-zinc-700/50 rounded-full overflow-hidden backdrop-blur-sm border border-zinc-600/30">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: isHovered ? `${skill.level}%` : 0 }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
-                      className="h-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-cyan-400 rounded-full shadow-lg shadow-emerald-500/50"
-                    />
-                  </div>
-                  <motion.p
-                    className="text-xs text-zinc-400 mt-2"
-                    animate={{ opacity: isHovered ? 1 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {skill.description}
-                  </motion.p>
-                </motion.div>
-              );
-            })}
+          <div className="grid md:grid-cols-2 gap-8">
+            {SKILL_GROUPS.map((group, idx) => (
+              <motion.div
+                key={group.category}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-colors"
+              >
+                <h3 className="text-lg font-semibold mb-6 text-blue-400">{group.category}</h3>
+                <div className="space-y-4">
+                  {group.skills.map((skill) => (
+                    <div key={skill.name}>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium">{skill.name}</span>
+                        <span className="text-xs text-gray-500">{skill.level}%</span>
+                      </div>
+                      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${skill.level}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: 0.2 }}
+                          className="h-full bg-gradient-to-r from-blue-500 to-cyan-500"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </div>
-      </motion.div>
-    ))}
-  </div>
-</Section>
-        {/* EXPERIENCE SECTION */}
-        <Section id="experience" title="Professional Journey">
-          <ExperienceTimeline />
-        </Section>
+        </motion.div>
+      </section>
 
-        {/* PROJECTS SECTION */}
-        <Section id="projects" title="Featured Projects" subtitle="Showcasing real-world solutions and technical expertise." dark>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Projects Section */}
+      <section id="projects" className="py-20 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="space-y-12"
+        >
+          <h2 className="text-4xl font-bold">Featured Projects</h2>
+
+          <div className="grid md:grid-cols-2 gap-8">
             {PROJECTS.map((project, idx) => (
               <motion.div
                 key={project.id}
@@ -332,222 +259,196 @@ const App: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
+                className="group p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-all hover:bg-white/10"
               >
-                <ProjectCard project={project} />
+                <div className="mb-4 h-40 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg overflow-hidden">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                <p className="text-gray-400 text-sm mb-4">{project.problem}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 text-xs bg-blue-500/20 text-blue-300 rounded-full"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-400 mb-4">{project.outcome}</p>
               </motion.div>
             ))}
           </div>
-        </Section>
+        </motion.div>
+      </section>
 
-        {/* EDUCATION & SOFT SKILLS */}
-        <section className="py-12 px-6 md:px-12 lg:px-24 bg-[#09090b]">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-8">Education</h2>
-              <div className="space-y-6">
-                {EDUCATION_DATA.map((edu, idx) => (
-                  <motion.div 
-                    key={idx}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    className="group relative"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative flex gap-6 p-6 rounded-2xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 backdrop-blur-xl hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-emerald-500/10">
-                      <div className="w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                        <Layout size={24} />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-bold text-white mb-1">{edu.degree}</h4>
-                        <p className="text-zinc-400">{edu.school}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+      {/* Experience Section */}
+      <section id="experience" className="py-20 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="space-y-12"
+        >
+          <h2 className="text-4xl font-bold">Experience</h2>
 
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-8">Soft Skills</h2>
-              <div className="grid sm:grid-cols-2 gap-6">
-                {SOFT_SKILLS.map((skill, idx) => (
-                  <motion.div 
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="group relative"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative p-6 rounded-2xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 backdrop-blur-xl hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-emerald-500/10">
-                      <div className="mb-4 text-emerald-400 group-hover:scale-110 transition-transform">
-                        {skill.icon}
-                      </div>
-                      <h4 className="font-bold text-white mb-2">{skill.name}</h4>
-                      <p className="text-sm text-zinc-400">{skill.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CONTACT SECTION */}
-        <Section id="contact" title="Get in Touch" subtitle="Let's discuss how we can build something impactful together." dark>
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Info */}
-            <motion.div 
+          <div className="space-y-8">
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="space-y-6"
+              className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-colors"
             >
-              <motion.a
-                href="mailto:a.mateen2025@gmail.com"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ x: 8 }}
-                className="group flex items-center gap-4 p-5 rounded-2xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 backdrop-blur-xl hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10"
-              >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 flex items-center justify-center group-hover:scale-110 transition-transform text-emerald-500">
-                  <Mail size={24} />
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-semibold">Web Developer</h3>
+                  <p className="text-blue-400">SK Financial (Remote)</p>
                 </div>
-                <div className="flex-1">
-                  <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Email Me</p>
-                  <p className="text-white font-semibold">a.mateen2025@gmail.com</p>
-                </div>
-                <ArrowRight size={18} className="text-zinc-500 group-hover:text-emerald-400 transition-colors" />
-              </motion.a>
+                <span className="text-sm text-gray-500">Sep 2024 – Jun 2026</span>
+              </div>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li>• Developed and maintained PHP based web applications using Laravel, Next.js, and MySQL</li>
+                <li>• Integrated Stripe payment functionality for transaction processing</li>
+                <li>• Collaborated with cross-functional teams to ship features on schedule</li>
+                <li>• Maintained technical documentation following software development best practices</li>
+              </ul>
+            </motion.div>
 
-              <motion.a
-                href="tel:+923119756139"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                whileHover={{ x: 8 }}
-                className="group flex items-center gap-4 p-5 rounded-2xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 backdrop-blur-xl hover:border-indigo-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/10"
-              >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 flex items-center justify-center group-hover:scale-110 transition-transform text-indigo-500">
-                  <Phone size={24} />
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-colors"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-semibold">Junior Web Developer</h3>
+                  <p className="text-blue-400">North Star Multinational Company (Remote)</p>
                 </div>
-                <div className="flex-1">
-                  <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Call Me</p>
-                  <p className="text-white font-semibold">Available</p>
-                </div>
-                <ArrowRight size={18} className="text-zinc-500 group-hover:text-indigo-400 transition-colors" />
-              </motion.a>
+                <span className="text-sm text-gray-500">Apr 2023 – Oct 2023</span>
+              </div>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li>• Maintained and debugged PHP applications, fixing bugs and resolving customer-reported issues</li>
+                <li>• Wrote and optimized SQL queries; integrated third-party APIs</li>
+                <li>• Participated in testing and deployment cycles</li>
+                <li>• Assisted in UI updates using modern CSS frameworks</li>
+              </ul>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
 
+      {/* Education Section */}
+      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="space-y-12"
+        >
+          <h2 className="text-4xl font-bold">Education</h2>
+
+          <div className="space-y-6">
+            {EDUCATION_DATA.map((edu, idx) => (
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="flex items-center gap-4 p-5 rounded-2xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 backdrop-blur-xl"
-              >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 flex items-center justify-center text-amber-500">
-                  <MapPin size={24} />
-                </div>
-                <div className="flex-1">
-                  <p className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Location</p>
-                  <p className="text-white font-semibold">{PROFILE.location}</p>
-                </div>
-              </motion.div>
-
-              {/* Social Links */}
-              <motion.div 
+                key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="pt-6 flex gap-4"
+                transition={{ delay: idx * 0.1 }}
+                className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-colors"
               >
-                <a href="https://github.com/AbdulMateen645" target="_blank" rel="noopener noreferrer" className="group w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 flex items-center justify-center text-zinc-400 hover:text-emerald-400 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/10">
-                  <Github size={24} className="group-hover:scale-110 transition-transform" />
-                </a>
-                <a href="https://www.linkedin.com/public-profile/settings?trk=d_flagship3_profile_self_view_public_profile" target="_blank" rel="noopener noreferrer" className="group w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 flex items-center justify-center text-zinc-400 hover:text-emerald-400 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/10">
-                  <Linkedin size={24} className="group-hover:scale-110 transition-transform" />
-                </a>
-                <a href="https://wa.me/923119756139" target="_blank" rel="noopener noreferrer" className="group w-14 h-14 rounded-xl bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 border border-zinc-700/50 flex items-center justify-center text-zinc-400 hover:text-emerald-400 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/10">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" className="group-hover:scale-110 transition-transform">
-                    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                  </svg>
-                </a>
+                <h3 className="text-lg font-semibold mb-2">{edu.degree}</h3>
+                <p className="text-blue-400">{edu.school}</p>
               </motion.div>
-            </motion.div>
-
-            {/* Contact Form */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="group relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative p-8 rounded-2xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/80 to-zinc-900/40 backdrop-blur-xl hover:border-emerald-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10">
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-1">Name</label>
-                      <input 
-                        required
-                        type="text" 
-                        placeholder="your name"
-                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-1">Email</label>
-                      <input 
-                        required
-                        type="email" 
-                        placeholder="youremail@gmail.com"
-                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-1">Subject</label>
-                    <input 
-                      required
-                      type="text" 
-                      placeholder="Project Inquiry"
-                      className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-1">Message</label>
-                    <textarea 
-                      required
-                      rows={4}
-                      placeholder="How can I help you?"
-                      className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50 transition-colors resize-none"
-                    />
-                  </div>
-                  <Button 
-                    disabled={formStatus !== 'idle'} 
-                    className="w-full py-4 gap-2"
-                  >
-                    {formStatus === 'idle' && <>Send Message <Send size={18} /></>}
-                    {formStatus === 'sending' && <>Sending...</>}
-                    {formStatus === 'success' && <><CheckCircle2 size={18} /> Message Sent!</>}
-                  </Button>
-                </form>
-              </div>
-            </motion.div>
+            ))}
           </div>
-        </Section>
-      </main>
+        </motion.div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="space-y-12"
+        >
+          <div className="space-y-4">
+            <h2 className="text-4xl font-bold">Let's Work Together</h2>
+            <p className="text-gray-400 text-lg max-w-2xl">
+              I'm always interested in hearing about new projects and opportunities. Feel free to reach out!
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.a
+              href="mailto:a.mateen2025@gmail.com"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-all hover:bg-white/10 group"
+            >
+              <Mail className="mb-4 text-blue-400 group-hover:scale-110 transition-transform" size={24} />
+              <h3 className="font-semibold mb-2">Email</h3>
+              <p className="text-gray-400">a.mateen2025@gmail.com</p>
+            </motion.a>
+
+            <motion.a
+              href="https://github.com/AbdulMateen645"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-all hover:bg-white/10 group"
+            >
+              <Github className="mb-4 text-blue-400 group-hover:scale-110 transition-transform" size={24} />
+              <h3 className="font-semibold mb-2">GitHub</h3>
+              <p className="text-gray-400">github.com/AbdulMateen645</p>
+            </motion.a>
+
+            <motion.a
+              href="https://www.linkedin.com/in/abdul-mateen-hashmi"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-all hover:bg-white/10 group"
+            >
+              <Linkedin className="mb-4 text-blue-400 group-hover:scale-110 transition-transform" size={24} />
+              <h3 className="font-semibold mb-2">LinkedIn</h3>
+              <p className="text-gray-400">linkedin.com/in/abdul-mateen-hashmi</p>
+            </motion.a>
+
+            <motion.button
+              onClick={() => window.open('/My CV/Abdul_Mateen_Hashmi_CV.pdf', '_blank')}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="p-6 bg-white/5 rounded-lg border border-white/10 hover:border-blue-500/50 transition-all hover:bg-white/10 group text-left"
+            >
+              <Download className="mb-4 text-blue-400 group-hover:scale-110 transition-transform" size={24} />
+              <h3 className="font-semibold mb-2">Resume</h3>
+              <p className="text-gray-400">Download my CV</p>
+            </motion.button>
+          </div>
+        </motion.div>
+      </section>
 
       {/* Footer */}
-      <footer className="py-6 border-t border-emerald-600/30 bg-gradient-to-r from-emerald-950 to-emerald-900 px-6 shadow-lg shadow-emerald-600/10">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-emerald-200 text-sm font-semibold">&copy; {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</p>
-        </div>
+      <footer className="py-8 px-6 border-t border-white/10 text-center text-gray-500 text-sm">
+        <p>&copy; {new Date().getFullYear()} Abdul Mateen Hashmi. All rights reserved.</p>
       </footer>
     </div>
   );
